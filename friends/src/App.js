@@ -1,27 +1,23 @@
 import React from 'react';
-import { Route, NavLink } from 'react-router-dom';
-import axios from 'axios';
-
+import logo from './logo.svg';
 import './App.css';
 
 function App() {
   return (
-    <div className='App'>
-      <header className='App-header'>
-        <div className='navi'>
-          <NavLink className='navLink' to='/'>Home</NavLink>
-          <NavLink className='navLink' to='/friend-form'>Friends?</NavLink>
-        </div>
-        <Route
-          exact
-          path='/'
-          render={props => <Friends {...props} friends={} />}
-        />
-        <Route
-          exact
-          path='/friend-form'
-          render={props => <FriendsForm {...props} loadFriends={} addFriend={this.addFriend} />}
-        />
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
       </header>
     </div>
   );
