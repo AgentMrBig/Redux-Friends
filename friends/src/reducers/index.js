@@ -1,10 +1,14 @@
 import { LOGIN_SUCCESS } from '../actions';
 
 const initialState = {
-    isLoggedIn: false
+    friends: [],
+    inLoggingIn: false,
+    isLoading: false,
+    isFetchingData: false,
+    error: ''
 };
 
-function reducer(state = initialState, action) {
+const reducer = (state = initialState, action) => {
     switch (action.type) {
         case LOGIN_SUCCESS:
             return {

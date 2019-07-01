@@ -43,7 +43,7 @@ class LoginForm extends React.Component {
                     value={this.state.credentials.password}
                     onChange={this.handleChanges}
                 />
-                <button onClick={this.login}>Update title</button>
+                <button onClick={this.login}>Log In</button>
                 <p>Token in localStorage:</p>
                 <p>
                     {localStorage.getItem('userToken')
