@@ -1,65 +1,85 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { useState } from 'react'
+import { connect } from 'react-redux'
+import { login } from '../actions'
+import styled from 'styled-components';
 
-import { login } from '../actions';
+const LoginFromStyled = styled.form`
+    padding: 32px 0;
+    background: #fff;
+    border-radius: 6px;
+    /* height: 300px; */
+    margin: 1rem auto;
+    position: relative;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: lightgray;
+`
 
-class LoginForm extends React.Component {
-    state = {
-        credentials: {
-            username: '',
-            password: ''
-        }
-    };
+const Input = styled.input`
+  height: 30px;
+  border-radius: 5px;
+  margin: 5px;
+  margin-right: 40px;
+  padding: 5px;
+`
 
-    handleChanges = e => {
-        this.setState({
-            credentials: {
-                ...this.state.credentials,
-                [e.target.name]: e.target.value
-            }
-        });
-    };
+const Button = styled.button`
+  margin-top: 20px;
+  height: 30px;
+  width: 100px;
+  border-radius: 5px;
 
-    login = e => {
-        e.preventDefault();
-        this.props.login(this.state.credentials);
-    };
+`
 
-    render() {
-        return (
-            <div className="login-form">
-                <h1>Login Form</h1>
-                <input
-                    type="text"
-                    name="username"
-                    placeholder="Username"
-                    value={this.state.credentials.username}
-                    onChange={this.handleChanges}
-                />
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    value={this.state.credentials.password}
-                    onChange={this.handleChanges}
-                />
-                <button onClick={this.login}>Log In</button>
-                <p>Token in localStorage:</p>
-                <p>
-                    {localStorage.getItem('userToken')
-                        ? 'Token is in localStorage!'
-                        : 'Nothing in localStorage yet'}
-                </p>
-            </div>
-        );
+const Label = styled.label`
+  width: 350px;
+  display: inline-block;
+  text-align: right;
+`
+
+const H1 = styled.h1`
+    text-align: center;
+`
+
+const LoginForm = (props) => {
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+
+    const handleSubmit = async e => {
+        e.preventDefault()
+        await props.login({ username, password })
+        await props.history.push('/')
     }
+
+    return (
+        <div>
+            <H1>React Friends</H1>
+            <LoginFromStyled onSubmit={e => handleSubmit(e)}>
+                <Label>
+                    Username:{` `}
+                    <Input
+                        type="text"
+                        value={username}
+                        onChange={e => setUsername(e.target.value)}
+                        placeholder="Username"
+                    />
+                </Label>
+                <Label>
+                    Password:{` `}
+                    <Input
+                        type="password"
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                        placeholder="Password"
+                    />
+                </Label>
+                <Button type="submit" value="Sign In">Sign In</Button>
+            </LoginFromStyled>
+        </div>
+    )
 }
 
-const mapStateToProps = ({ isLoggedIn }) => ({
-    isLoggedIn
-});
-
-export default connect(
-    mapStateToProps,
-    { login } // same as { updateTitle: updateTitle }
-)(LoginForm);
+export default connect(null, { login })(LoginForm)

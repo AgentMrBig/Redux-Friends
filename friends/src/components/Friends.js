@@ -1,66 +1,54 @@
-import React, { Component } from 'react';
-import './App.css';
-import logo from '../logo.svg';
-import SelectedFriend from './SelectedFriends';
-import { connect } from 'react-redux';
-import { deleteFriend, updateSingleFriend, toggleShowUpdate } from '../actions';
-import UpdateFriendForm from './UpdateFriendForm';
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
+import styled from 'styled-components'
 
-class Friends extends Component {
-    handleDeleteFriend = () => {
-        const { id } = this.props.friendSelected;
-        this.props.deleteFriend(id);
-    };
+import FriendForm from './FriendForm'
+import { getFriends, addFriend } from '../actions'
 
-    handleShowFriend = friend => {
-        this.props.updateSingleFriend(friend);
-    };
+const FriendStyled = styled.div`
+    padding: 32px 0;
+    background: #fff;
+    border-radius: 6px;
+    /* height: 300px; */
+    margin: 1rem auto;
+    position: relative;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: lightgray;
+`
 
-    toggleShowUpdate = () => {
-        this.props.toggleShowUpdate();
-    };
-    render() {
-        return (
-            <div className="Friend-Container">
-                <ul className="Friend-List">
-                    {this.props.friends.map(friend => {
-                        return (
-                            <li onClick={() => this.handleShowFriend(friend)} key={friend.id}>
-                                {friend.name}
-                            </li>
-                        );
-                    })}
-                </ul>
-                {Object.keys(this.props.friendSelected).length > 0 ? (
-                    <SelectedFriend
-                        handleShowFriend={this.handleShowFriend}
-                        toggleShowUpdate={this.toggleShowUpdate}
-                        handleDeleteFriend={this.handleDeleteFriend}
-                        selected={this.props.friendSelected}
-                    />
-                ) : null}
-                {this.props.showUpdate ? (
-                    <UpdateFriendForm friend={this.props.friendSelected} />
-                ) : null}
-                {this.props.deletingFriend ? (
-                    <img src={logo} className="App-logo" alt="logo" />
-                ) : null}
-            </div>
-        );
-    }
+const H1 = styled.h1`
+    text-align: center;
+`
+
+const Friends = (props) => {
+    useEffect(() => {
+        props.getFriends()
+    }, [])
+
+    return (
+        <div>
+            <H1>React Friends</H1>
+            <FriendForm addFriend={props.addFriend} />
+            {props.friends.map(friend => (
+                <FriendStyled key={friend.id}>
+                    <p><strong>Name: </strong>{friend.name}</p>
+                    <p><strong>Age: </strong>{friend.age}</p>
+                    <p><strong>Email: </strong>{friend.email}</p>
+                </FriendStyled>
+            ))}
+        </div>
+    )
 }
 
-const mapStateToProps = state => {
-    return {
-        deletingFriend: state.friendsReducer.deletingFriend,
-        error: state.friendsReducer.error,
-        showUpdate: state.singleFriendReducer.showUpdate,
-        friendSelected: state.singleFriendReducer.friendSelected
-    };
-};
+const mapStateToProps = state => ({
+    friends: state.friends,
+})
 
-export default connect(mapStateToProps, {
-    deleteFriend,
-    updateSingleFriend,
-    toggleShowUpdate
-})(Friends);
+export default connect(
+    mapStateToProps,
+    { getFriends, addFriend }
+)(Friends)
