@@ -50,8 +50,32 @@ const FriendForm = props => {
 
   const handleSubmit = e => {
     e.preventDefault()
-    props.addFriend({ name, age, email })
-    clearForm()
+    if (validation()) {
+      props.addFriend({ name, age, email })
+      clearForm()
+    }
+
+  }
+
+  // Name and Email validation Function.
+  const validation = () => {
+    var name = document.getElementById("name").value;
+    var age = document.getElementById('age').value;
+    var email = document.getElementById("email").value;
+    var emailReg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (name === '' || email === '') {
+      alert("Please fill all fields...!!!!!!");
+      return false;
+    } else if (!(email).match(emailReg)) {
+      alert("Invalid Email...!!!!!!");
+      return false;
+    } else if (isNaN(age) || age === '') {
+      alert("Please use only numbers for age!");
+      console.log('age is not a number!');
+      return false;
+    } else {
+      return true;
+    }
   }
 
   return (
@@ -59,8 +83,9 @@ const FriendForm = props => {
       <Label>
         Name:{` `}
         <Input
+          id="name"
           type="text"
-          placeholder="Jane Smith"
+          placeholder="Marcus Aurileus"
           value={name}
           onChange={e => setName(e.target.value)}
         />
@@ -68,8 +93,9 @@ const FriendForm = props => {
       <Label>
         Age:{` `}
         <Input
+          id="age"
           type="number"
-          placeholder="23"
+          placeholder="69"
           value={age}
           onChange={e => setAge(e.target.value)}
         />
@@ -77,8 +103,9 @@ const FriendForm = props => {
       <Label>
         Email:{` `}
         <Input
+          id="email"
           type="email"
-          placeholder="jane.smith@example.com"
+          placeholder="someemail@youremail.com"
           value={email}
           onChange={e => setEmail(e.target.value)}
         />
